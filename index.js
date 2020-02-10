@@ -54,6 +54,24 @@ server.get(`${url}/:id`, (req, res) => {
     });
 });
 
+// delete user by id
+server.delete(`${url}/:id`, (req, res) => {
+    
+    const { id } = req.params;
+
+    DB.remove(id).then(removed => {
+        if(removed) {
+            res.status(200).json(removed);
+        }
+        else {
+            res.status(404).json({ message: "The user with the specified ID does not exist." });
+        }
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({ errorMessage: "The user could not be removed" });
+    });
+});
+
 const port = 5000;
 
 server.listen(port, () => console.log(`\nServer listening on port ${port}\n`));
