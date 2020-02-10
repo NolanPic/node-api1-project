@@ -10,12 +10,29 @@ server.get('/', (req, res) => {
 
 const url = '/api/users';
 
+// get all users
 server.get(url, (req, res) => {
     DB.find().then(users => {
         res.status(200).json(users);
     }).catch(err => {
         console.log(err);
         res.status(500).json({ errorMessage: "The users information could not be retrieved." });
+    });
+});
+
+// get user by id
+server.get(`${url}/:id`, (req, res) => {
+
+    const { id } = req.params;
+
+    DB.findById(id).then(user => {
+        if(!user) {
+            res.status(404).json({ message: "The user with the specified ID does not exist." });
+        }
+        res.status(200).json(user);
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({ errorMessage: "The user information could not be retrieved." });
     });
 });
 
