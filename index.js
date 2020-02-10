@@ -3,12 +3,21 @@ const DB = require('./data/db.js');
 
 const server = express();
 
+server.use(express.json());
+
 // root request
 server.get('/', (req, res) => {
     res.json('Welcome to Nodejs');
 });
 
 const url = '/api/users';
+
+// create new user
+server.post(url, (req, res) => {
+    const user = req.body;
+
+    res.json(user);
+});
 
 // get all users
 server.get(url, (req, res) => {
