@@ -72,6 +72,35 @@ server.delete(`${url}/:id`, (req, res) => {
     });
 });
 
+// put user by id
+server.put(`${url}/:id`, (req, res) => {
+
+    const { id } = req.params;
+
+    const user = req.body;
+
+    // request is invalid
+    if(!user.name || !user.bio) {
+        res.status(400).json({ errorMessage: "Please provide name and bio for the user." });
+    }
+    else {
+        DB.update(id, user).then(updated => {
+            if(updated) {
+                // user updated
+                res.status(200).json(user);
+            }
+            else {
+                // user does not exist
+                res.status(404).json({ message: "The user with the specified ID does not exist." });
+            }
+        }).catch(err => {
+            console.log(err);
+            // server error
+            res.status(500).json({ errorMessage: "The user information could not be modified." });
+        });
+    }
+});
+
 const port = 5000;
 
 server.listen(port, () => console.log(`\nServer listening on port ${port}\n`));
